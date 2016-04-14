@@ -1,0 +1,21 @@
+# figure out where you will be putting the jump drive location
+
+sslgetcert() {
+  /usr/bin/openssl s_client -showcerts -connect $1 
+}
+
+sslconvertp7b() {
+  /usr/bin/openssl pkcs7 -inform DER -outform PEM -in $1 -print_certs > $2
+}
+
+sslconvertder() {
+  /usr/bin/openssl x509 -inform DER -outform PEM -in $1 -out $2
+}
+
+sslpem() {
+  /usr/bin/openssl x509 -in $1 -text -noout
+}
+
+sslder() {
+  /usr/bin/openssl x509 -in $1 -inform der -text -noout
+}
