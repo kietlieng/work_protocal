@@ -1,0 +1,67 @@
+function playtime() {
+  SEDTEMP=/tmp/sed_break
+  COMMENTEDOUT=$(/usr/bin/head -n 1 /etc/hosts | cut -c 1-1)
+  if [ "$COMMENTEDOUT" = "#" ]; then
+    echo "Get my hustle on!!!"
+  	RELEASETHEBEAST=$(/usr/bin/head -n 1 /etc/hosts | cut -c 2-)
+    /usr/local/bin/sed "1 s/.*/$RELEASETHEBEAST/" /etc/hosts > $SEDTEMP
+    /usr/bin/sudo /bin/mv $SEDTEMP /etc/hosts
+    marktime
+  else
+    echo "Been at it since ... "
+    tallytime
+  fi
+}
+
+function breaktime() {
+  SEDTEMP=/tmp/sed_break
+  COMMENTEDOUT=$(/usr/bin/head -n 1 /etc/hosts | cut -c 1-1)
+  if [ "$COMMENTEDOUT" = "#" ]; then
+    echo "Already having fun since ... "
+    tallytime
+    echo "Get back to work!"
+  else
+    echo "You can have fun ..."
+    /usr/local/bin/sed "1 s/^/#/" /etc/hosts > $SEDTEMP
+    /usr/bin/sudo /bin/mv $SEDTEMP /etc/hosts
+    marktime
+  fi
+}
+
+function marktime() {
+	echo $(/bin/date +%s) > ~/.marktime
+}
+
+function tallytime() {
+    LASTMARK=$(<~/.marktime)
+    CURRENTMARK=$(/bin/date +%s)
+    duration=$(( $(date -r "$CURRENTMARK" "+%s") - $(date -r "$LASTMARK" "+%s") ))
+	echo "=================================="
+    TOTALTIME="Which is about "
+    if [ "$duration" -gt "86400" ]; then
+		TOTALTIME="$TOTALTIME$(($duration / 86400)) days "
+        duration="$(($duration % 86400))"
+    fi
+    if [ "$duration" -gt "3600" ]; then
+		TOTALTIME="$TOTALTIME$(($duration / 3600)) hours "
+        duration="$(($duration % 3600))"
+    fi
+	TOTALTIME="$TOTALTIME$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed or since ... "
+	date -r $LASTMARK
+    thinking 
+    echo $TOTALTIME
+	echo "=================================="
+}
+
+function thinking() {
+	sleep 1 
+}
+
+function mastadon() {
+    marktime
+    echo "ready!\n"
+	thinking
+	echo "\n\nset!!\n\n"
+	thinking
+	echo "\n\ngo!!!!!\n\n!!!!\n\n\n!!!!!\n\n\n!!!!!\n\n\n\n!!!!!\n\n\n!!!!!!"
+}
